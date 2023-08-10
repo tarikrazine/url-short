@@ -1,7 +1,7 @@
 import { getDomain } from "@/lib/getDomain"
 
 async function getData() {
-  const response = await fetch(`${getDomain()}/api`, { next: { revalidate: 10 }})
+  const response = await fetch(`${getDomain()}/api`)
 
   if (!response.ok) {
     throw new Error('Failed to get data!')
