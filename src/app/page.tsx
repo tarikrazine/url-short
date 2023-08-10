@@ -14,7 +14,9 @@ async function getData() {
 
 export default async function Home() {
 
-  // const data = await getData()
+  const data = await getData()
+
+  console.log(data)
 
   return (
     <main className="p-24">
