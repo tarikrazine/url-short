@@ -14,13 +14,13 @@ async function getData() {
 
 export default async function Home() {
 
-  const data = await getData()
+  const data = getDomain()
 
   console.log(data)
 
   return (
     <main className="p-24">
-      {/* { data && JSON.stringify(data, null, 2)} */} project
+      {/* { data && JSON.stringify(data, null, 2)} */} {data}
     </main>
   )
 }
