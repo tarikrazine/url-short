@@ -1,4 +1,3 @@
-import { getDomain } from "@/lib/getDomain";
 import { NextResponse } from "next/server";
 
 export const runtime = "edge";

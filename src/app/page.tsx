@@ -1,7 +1,7 @@
 import { getDomain } from "@/lib/getDomain"
 
 async function getData() {
-  const response = await fetch(`${getDomain()}/api`)
+  const response = await fetch(`${getDomain()}/api`, { next: { revalidate: 10 }})
 
   if (!response.ok) {
     throw new Error('Failed to get data!')
@@ -9,20 +9,12 @@ async function getData() {
 
   const data = response.json()
 
-  return []
+  return data
 }
 
 export default async function Home() {
 
-  const response = await fetch(`${getDomain()}/api`)
-
-  if (!response.ok) {
-    throw new Error('Failed to get data!')
-  }
-
-  const data = await response.json()
-
-  console.log(data)
+  const data = await getData()
 
   return (
     <main className="p-24">
