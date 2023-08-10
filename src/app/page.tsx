@@ -7,6 +7,10 @@ async function getData() {
     throw new Error('Failed to get data!')
   }
 
+  if (response.headers.get('content-type') !== 'application/json') {
+    return []
+  }
+
   const data = response.json()
 
   return data
