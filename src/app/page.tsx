@@ -1,26 +1,24 @@
 import { getDomain } from "@/lib/getDomain"
 
 async function getData() {
-  const response = await fetch(`${getDomain()}/api`)
+  // const response = await fetch(`${getDomain()}/api`)
 
-  if (!response.ok) {
-    throw new Error('Failed to get data!')
-  }
+  // if (!response.ok) {
+  //   throw new Error('Failed to get data!')
+  // }
 
-  const data = response.json()
+  // const data = response.json()
 
-  return data
+  return []
 }
 
 export default async function Home() {
 
-  const data = getDomain()
-
-  console.log(data)
+  const data = await getData()
 
   return (
     <main className="p-24">
-      {/* { data && JSON.stringify(data, null, 2)} */} {data}
+      { data && JSON.stringify(data, null, 2)}
     </main>
   )
 }
