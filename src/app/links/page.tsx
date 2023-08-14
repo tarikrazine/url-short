@@ -22,7 +22,11 @@ export default async function LinksPage() {
         <>
             <AddLink />
             <section>
-                {JSON.stringify(data, null, 2)}
+                {data.map((link) => {
+                    return (
+                        <h2 key={link.id}>{link.url}</h2>
+                    )
+                })}
             </section>
         </>
     )
