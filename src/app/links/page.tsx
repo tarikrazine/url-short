@@ -3,6 +3,7 @@ import { linksTable } from "@/schema/links"
 import { AddLink } from "@/components/AddLink"
 
 export const revalidate = 10
+export const fetchCache = 'force-no-store'
 
 export async function getLinks(limit = 10, offset = 0) {
     const data = await db.select().from(linksTable).limit(limit).offset(offset)
