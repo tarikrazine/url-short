@@ -1,34 +1,50 @@
-import { db } from "@/lib/db"
-import { linksTable } from "@/schema/links"
-import { AddLink } from "@/components/AddLink"
-
-export const revalidate = 10
-export const fetchCache = 'force-no-store'
+import { db } from "@/lib/db";
+import { linksTable, type Link } from "@/schema/links";
+import { AddLink } from "@/components/AddLink";
+import { getDomain } from "@/lib/getDomain";
 
 export async function getLinks(limit = 10, offset = 0) {
-    const data = await db.select().from(linksTable).limit(limit).offset(offset)
+  const response = await fetch(`${getDomain()}/api/links`, {
+    next: { revalidate: 10 },
+  });
 
-    if (!data) {
-        return []
-    }
+  if (!response.ok) {
+    throw new Error("Failed to get data!");
+  }
 
-    return data
+  if (response.headers.get("content-type") !== "application/json") {
+    return [];
+  }
+
+  const data = await response.json();
+
+  console.log("1", data)
+
+  return data;
 }
 
 export default async function LinksPage() {
+  const data = await getLinks();
 
-    const data = await getLinks()
+  console.log(data);
 
+  if (!data) {
     return (
-        <>
-            <AddLink />
-            <section>
-                {data.map((link) => {
-                    return (
-                        <h2 key={link.id}>{link.url}</h2>
-                    )
-                })}
-            </section>
-        </>
-    )
+      <>
+        <AddLink />
+        <section>Something went wrong!</section>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <AddLink />
+      <section>
+        {data.map((link: Link) => {
+          return <h2 key={link.id}>{link.url}</h2>;
+        })}
+      </section>
+    </>
+  );
 }

@@ -1,8 +1,15 @@
 "use server";
 
-export async function addLink(formData: FormData) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  const data = Object.fromEntries(formData);
+import { getDomain } from "@/lib/getDomain";
 
-  return data;
+export async function addLink(
+  formData: FormData,
+): Promise<string | void | Object> {
+  const response = await fetch(`${getDomain()}/api/links/add`, {
+    method: "POST",
+    body: JSON.stringify(Object.fromEntries(formData)),
+    headers: { "content-type": "application/json" },
+  });
+
+  return await response.json();
 }

@@ -1,27 +1,36 @@
 "use client";
+import { useState, useTransition } from "react";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation"
 
 import { addLink } from "@/mutations/addLink";
 
 interface AddLinkProps {}
 
 export const AddLink = (props: AddLinkProps) => {
-  const [isPending, setIsPending] = useState<boolean>(false);
 
-  console.log(isPending)
+  const [isPending, startTransition] = useTransition()
+
+  const [error, setError] = useState<string | null>()
+
+  const router = useRouter()
 
   return (
     <section>
       <form
         action={async (formData) => {
-          setIsPending(true)
 
-          const sendData = await addLink(formData)
+          startTransition(async () => {
+            const response = await addLink(formData)
 
-          setIsPending(false)
+            if (typeof response === "string") {
+              setError(response)
+            } else {
+              setError(null)
+              router.refresh()
+            }
+          })
 
-          console.log(sendData)
         }}
       >
         <input type="text" name="link" placeholder="Add your link here" />
@@ -30,6 +39,9 @@ export const AddLink = (props: AddLinkProps) => {
           {isPending ? "Sending..." : "Add link"}
         </button>
       </form>
+      {
+        error && (<p>{error}</p>)
+      }
     </section>
   );
 };

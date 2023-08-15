@@ -1,42 +1,15 @@
 import { NextResponse } from "next/server";
 
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
-
-import isValidURL from "@/lib/isValidURL";
-import { linksTable, type NewLink } from "@/schema/links";
 import { db } from "@/lib/db";
+import { linksTable } from "@/schema/links";
 
-export async function POST(request: Request) {
-  const body = await request.json();
+export const runtime = "edge";
 
-  const url = await isValidURL(body.link, [
-    "example.com",
-    process.env.NEXT_PUBLIC_VERCEL_URL!,
-  ]);
+export async function GET() {
+  const limit = 100;
+  const offset = 0;
 
-  if (!url) {
-    return NextResponse.json("Url is not valid", { status: 400 });
-  }
+  const data = await db.select().from(linksTable).limit(limit).offset(offset);
 
-  try {
-    const insertLinkSchema = createInsertSchema(linksTable, {
-      // Example validating url using zod
-      //url: (schema) => schema.url.url({ message: "not valid url" }),
-    });
-
-    const link: NewLink = {
-      url: body.link,
-    };
-
-    insertLinkSchema.parse(link);
-
-    const newLink = await db.insert(linksTable).values(link).returning();
-
-    return NextResponse.json(newLink, { status: 200 });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json("Error validating schema", { status: 400 });
-    }
-  }
+  return NextResponse.json(data, { status: 200 });
 }
