@@ -24,17 +24,6 @@ export async function getLinks() {
 export default async function LinksPage() {
   const data = await getLinks();
 
-  console.log(data);
-
-  if (!data) {
-    return (
-      <>
-        <AddLink />
-        <section>Something went wrong!</section>
-      </>
-    );
-  }
-
   return (
     <>
       <AddLink />
