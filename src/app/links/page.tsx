@@ -3,7 +3,7 @@ import { linksTable, type Link } from "@/schema/links";
 import { AddLink } from "@/components/AddLink";
 import { getDomain } from "@/lib/getDomain";
 
-export async function getLinks(limit = 10, offset = 0) {
+export async function getLinks() {
   const response = await fetch(`${getDomain()}/api/links`, {
     next: { revalidate: 10 },
   });
@@ -16,9 +16,7 @@ export async function getLinks(limit = 10, offset = 0) {
     return [];
   }
 
-  const data = await response.json();
-
-  console.log("1", data)
+  const data = response.json();
 
   return data;
 }
@@ -41,7 +39,7 @@ export default async function LinksPage() {
     <>
       <AddLink />
       <section>
-        {data.map((link: Link) => {
+        {data && data.map((link: Link) => {
           return <h2 key={link.id}>{link.url}</h2>;
         })}
       </section>
