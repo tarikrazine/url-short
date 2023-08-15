@@ -4,19 +4,10 @@ import { AddLink } from "@/components/AddLink";
 import { getDomain } from "@/lib/getDomain";
 
 async function getLinks() {
-  const response = await fetch(`${getDomain()}/api/links`, {
-    next: { revalidate: 10 },
-  });
+  const limit = 5;
+  const offset = 0;
 
-  if (!response.ok) {
-    throw new Error("Failed to get data!");
-  }
-
-  if (response.headers.get("content-type") !== "application/json") {
-    return [];
-  }
-
-  const data = response.json();
+  const data = await db.select().from(linksTable).limit(limit).offset(offset);
 
   return data;
 }
@@ -28,9 +19,10 @@ export default async function LinksPage() {
     <>
       <AddLink />
       <section>
-        {data && data.map((link: Link) => {
-          return <h2 key={link.id}>{link.url}</h2>;
-        })}
+        {data &&
+          data.map((link) => {
+            return <h2 key={link.id}>{link.url}</h2>;
+          })}
       </section>
     </>
   );
