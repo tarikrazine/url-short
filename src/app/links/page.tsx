@@ -4,7 +4,7 @@ import { AddLink } from "@/components/AddLink";
 import { getDomain } from "@/lib/getDomain";
 
 async function getLinks() {
-  const limit = 5;
+  const limit = 10;
   const offset = 0;
 
   const data = await db.select().from(linksTable).limit(limit).offset(offset);
