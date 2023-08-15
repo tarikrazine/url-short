@@ -3,7 +3,7 @@ import { linksTable, type Link } from "@/schema/links";
 import { AddLink } from "@/components/AddLink";
 import { getDomain } from "@/lib/getDomain";
 
-export async function getLinks() {
+async function getLinks() {
   const response = await fetch(`${getDomain()}/api/links`, {
     next: { revalidate: 10 },
   });
