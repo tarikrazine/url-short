@@ -7,6 +7,7 @@ import isValidURL from "@/lib/isValidURL";
 import { linksTable, type NewLink } from "@/schema/links";
 import { db } from "@/lib/db";
 import { randomShortString } from "@/lib/randomShortString";
+import { DrizzleError } from "drizzle-orm";
 
 export async function POST(request: Request) {
   const body = await request.json() as { link: string };
@@ -33,11 +34,22 @@ export async function POST(request: Request) {
 
     insertLinkSchema.parse(link);
 
-    const newLink = await db.insert(linksTable).values(link).returning();
+    try {
+      const newLink = await db.insert(linksTable).values(link).returning();
+      return NextResponse.json(newLink, { status: 200 });
+    } catch (error) {
+      if (error instanceof DrizzleError) {
+        console.log(error);
+        return NextResponse.json("Not valid please try again.", {
+          status: 400,
+        });
+      }
 
-    return NextResponse.json(newLink, { status: 200 });
+      console.log(error);
+    }
   } catch (error) {
     if (error instanceof z.ZodError) {
+      console.log(error);
       return NextResponse.json("Error validating schema", { status: 400 });
     }
   }

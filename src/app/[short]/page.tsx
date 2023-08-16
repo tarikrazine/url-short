@@ -1,18 +1,25 @@
+import { notFound, redirect } from "next/navigation";
+
+import { eq } from "drizzle-orm";
+
 import { db } from "@/lib/db";
 import { linksTable } from "@/schema/links";
-import { eq } from "drizzle-orm";
-import { RedirectType } from "next/dist/client/components/redirect";
-import { notFound, redirect } from "next/navigation";
+import { visitsTable } from "@/schema/visits";
 
 async function getShortLinkRecord(short: string) {
   const link = await db
     .select({
-      url: linksTable.url,
+      id: linksTable.id,
+      url: linksTable.url
     })
     .from(linksTable)
     .where(eq(linksTable.short, short));
 
   return link;
+}
+
+async function saveLinkVisit(linkId: number) {
+  await db.insert(visitsTable).values({linkId: linkId})
 }
 
 export default async function ShortPage(props: { params: { short: string } }) {
@@ -22,11 +29,16 @@ export default async function ShortPage(props: { params: { short: string } }) {
     notFound();
   }
 
-  const { url } = record;
+  const { url, id } = record;
 
   if (!url) {
     notFound();
   }
 
-  redirect(url, RedirectType.push);
+  if (id) {
+    await saveLinkVisit(id)
+  }
+  
+  //redirect(url, RedirectType.push);
+  return <h1>{url}</h1>
 }
