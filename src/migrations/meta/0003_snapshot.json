@@ -1,0 +1,58 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "id": "417c3096-88f3-477a-a818-07e53dbc5279",
+  "prevId": "78b73efc-f31d-4a5b-90b5-724659583b37",
+  "tables": {
+    "links": {
+      "name": "links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "short": {
+          "name": "short",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "url_idx": {
+          "name": "url_idx",
+          "columns": [
+            "url"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

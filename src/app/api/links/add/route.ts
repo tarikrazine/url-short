@@ -6,9 +6,10 @@ import { z } from "zod";
 import isValidURL from "@/lib/isValidURL";
 import { linksTable, type NewLink } from "@/schema/links";
 import { db } from "@/lib/db";
+import { randomShortString } from "@/lib/randomShortString";
 
 export async function POST(request: Request) {
-  const body = await request.json();
+  const body = await request.json() as { link: string };
 
   const url = await isValidURL(body.link, [
     "example.com",
@@ -26,7 +27,8 @@ export async function POST(request: Request) {
     });
 
     const link: NewLink = {
-      url: body.link,
+      url: body.link.toLowerCase(),
+      short: randomShortString(),
     };
 
     insertLinkSchema.parse(link);

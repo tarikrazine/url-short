@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation"
 
 import { addLink } from "@/mutations/addLink";
+import { NewLink } from "@/schema/links";
+import { type KeyedMutator } from "swr";
 
 interface AddLinkProps {}
 
