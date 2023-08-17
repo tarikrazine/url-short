@@ -24,5 +24,8 @@ export const linksTableRelations = relations(linksTable, ({ many, one }) => ({
   visits: many(visitsTable),
 }));
 
-export type Link = InferModel<typeof linksTable, "select">;
+export type Link = InferModel<
+  typeof linksTable,
+  "select"
+>;
 export type NewLink = InferModel<typeof linksTable, "insert">;

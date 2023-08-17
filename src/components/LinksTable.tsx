@@ -23,9 +23,9 @@ function LinksTable(props: LinksTableProps) {
   return (
     <>
       {data &&
-        data.map((link) => (
+        data.map((link: any) => (
           <div key={link.id} className="flex gap-2">
-            <h2>{link.url}</h2> <p>{link.short}</p>
+            <h2>{link.url}</h2> <p>{link.short}</p> <p>{link.visits.length}</p>
           </div>
         ))}
     </>
