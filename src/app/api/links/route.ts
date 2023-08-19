@@ -24,14 +24,5 @@ export async function GET() {
     },
   });
 
-  // const count = await db.select({
-  //   count: sql`count(${visitsTable.id})`,
-  // }).from(visitsTable).leftJoin(
-  //   visitsTable,
-  //   eq(visitsTable.linkId, linksTable.id),
-  // );
-
-  // console.log(count);
-
   return NextResponse.json(data, { status: 200 });
 }

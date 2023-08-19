@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1691784595875,
-      "tag": "0000_gigantic_exodus",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1691785667941,
-      "tag": "0001_curvy_frog_thor",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1691786811952,
-      "tag": "0002_tense_doctor_doom",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1692174567068,
-      "tag": "0003_adorable_proemial_gods",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1692218041995,
-      "tag": "0004_good_the_phantom",
+      "when": 1692438677628,
+      "tag": "0000_light_omega_red",
       "breakpoints": true
     }
   ]

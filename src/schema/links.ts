@@ -1,5 +1,6 @@
 import { InferModel, relations, sql } from "drizzle-orm";
 import {
+  integer,
   pgTable,
   serial,
   text,
@@ -8,11 +9,13 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { visitsTable } from "./visits";
+import { usersTable } from "./users";
 
 export const linksTable = pgTable("links", {
   id: serial("id").primaryKey().notNull(),
   url: text("url").notNull(),
   short: varchar("short", { length: 200 }),
+  authorId: integer("author_id").references(() => usersTable.id),
   createdAt: timestamp("created_at").defaultNow(),
 }, (links) => {
   return {
@@ -21,6 +24,10 @@ export const linksTable = pgTable("links", {
 });
 
 export const linksTableRelations = relations(linksTable, ({ many, one }) => ({
+  user: one(usersTable, {
+    fields: [linksTable.authorId],
+    references: [usersTable.id],
+  }),
   visits: many(visitsTable),
 }));
 

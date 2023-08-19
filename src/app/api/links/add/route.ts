@@ -9,6 +9,8 @@ import { db } from "@/lib/db";
 import { randomShortString } from "@/lib/randomShortString";
 import { DrizzleError } from "drizzle-orm";
 
+export const runtime = "edge";
+
 export async function POST(request: Request) {
   const body = await request.json() as { link: string };
 

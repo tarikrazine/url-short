@@ -1,1 +1,0 @@
-ALTER TABLE "links" ADD COLUMN "short" varchar(50);
