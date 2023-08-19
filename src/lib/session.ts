@@ -1,13 +1,11 @@
 import * as jose from "jose";
 
-const secret = jose.base64url.decode(
-  process.env.JWT_SECRET!,
-);
+const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 const issuer = "urn:shortUrl:issuer";
 const audience = "urn:shortUrl:audience";
 const expiresAt = "2h";
 
-export async function encodeUserSession(userId: string) {
+export async function encodeUserSession(userId: number) {
   const jwt = await new jose.EncryptJWT({ user: userId })
     .setProtectedHeader({
       alg: "dir",
