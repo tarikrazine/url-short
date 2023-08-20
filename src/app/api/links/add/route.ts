@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
+import { DrizzleError, eq } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -7,14 +9,31 @@ import isValidURL from "@/lib/isValidURL";
 import { linksTable, type NewLink } from "@/schema/links";
 import { db } from "@/lib/db";
 import { randomShortString } from "@/lib/randomShortString";
-import { DrizzleError } from "drizzle-orm";
+import { decodeUserSession } from "@/lib/session";
+import { User, usersTable } from "@/schema/users";
 
-export const runtime = "edge";
+//export const runtime = "edge";
 
-export async function POST(request: Request) {
-  const body = await request.json() as { link: string };
+export async function POST(request: NextRequest) {
+  const body = await request.json() as { url: string; jwt?: string };
 
-  const url = await isValidURL(body.link, [
+  let user: Pick<User, "id" | "email">;
+
+  if (body.jwt) {
+    const verifyJwt = await decodeUserSession(body.jwt);
+
+    const [getUser] = await db.select({
+      id: usersTable.id,
+      email: usersTable.email,
+    }).from(usersTable).where(eq(usersTable.id, Number(verifyJwt?.user)));
+
+    if (!getUser) {
+      return NextResponse.json("User doesn't exist", { status: 400 });
+    }
+    user = getUser;
+  }
+
+  const url = await isValidURL(body.url, [
     "example.com",
     process.env.NEXT_PUBLIC_VERCEL_URL!,
   ]);
@@ -29,10 +48,15 @@ export async function POST(request: Request) {
       //url: (schema) => schema.url.url({ message: "not valid url" }),
     });
 
-    const link: NewLink = {
-      url: body.link.toLowerCase(),
+    let link: NewLink = {
+      url: body.url.toLowerCase(),
       short: randomShortString(),
     };
+
+    if (user!) {
+      console.log("cd", user!);
+      link["authorId"] = user.id;
+    }
 
     insertLinkSchema.parse(link);
 

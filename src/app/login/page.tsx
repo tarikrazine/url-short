@@ -1,3 +1,6 @@
+import { RedirectType } from "next/dist/client/components/redirect";
+
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import { z } from "zod";
@@ -10,7 +13,7 @@ import Button from "@/components/Button";
 import { comparePassword, hashPassword } from "@/lib/hashPassword";
 
 import { newUser, usersTable } from "@/schema/users";
-import { encodeUserSession } from "@/lib/session";
+import { decodeUserSession, encodeUserSession } from "@/lib/session";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -18,6 +21,22 @@ const loginSchema = z.object({
 });
 
 export default async function LoginPage() {
+
+  const getSession = cookies().get('session_id')?.value
+
+  if (getSession) {
+
+    const verifyJwt = await decodeUserSession(getSession)
+  
+    const [ getUser ] = await db.select({ id: usersTable.id, email: usersTable.email }).from(usersTable).where(eq(usersTable.id, Number(verifyJwt?.user)))
+  
+    if (getUser) {
+      redirect('/links', RedirectType.push)
+    }
+
+  }
+
+
   async function loginUser(formData: FormData) {
     "use server";
 
@@ -53,7 +72,14 @@ export default async function LoginPage() {
 
     const jwt = await encodeUserSession(userExists.id);
 
-    cookies().set("session_id", jwt);
+    cookies().set({
+      name: "session_id",
+      value: jwt,
+      httpOnly: true,
+      secure: true
+    });
+
+    redirect('/links', RedirectType.push)
   }
 
   return (

@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { linksTable } from "@/schema/links";
 
 export const runtime = "edge";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const limit = 100;
   const offset = 0;
 

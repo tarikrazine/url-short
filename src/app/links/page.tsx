@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+
 import { db } from "@/lib/db";
 import { linksTable, type Link } from "@/schema/links";
 import { AddLink } from "@/components/AddLink";
@@ -13,7 +15,7 @@ import LinksTable from "@/components/LinksTable";
 // }
 
 export default async function LinksPage() {
-//   const data = await getLinks();
+  //   const data = await getLinks();
 
   return (
     <>

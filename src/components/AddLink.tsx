@@ -4,8 +4,6 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation"
 
 import { addLink } from "@/mutations/addLink";
-import { NewLink } from "@/schema/links";
-import { type KeyedMutator } from "swr";
 
 interface AddLinkProps {}
 
@@ -21,7 +19,6 @@ export const AddLink = (props: AddLinkProps) => {
     <section>
       <form
         action={async (formData) => {
-
           startTransition(async () => {
             const response = await addLink(formData)
 
@@ -35,10 +32,10 @@ export const AddLink = (props: AddLinkProps) => {
 
         }}
       >
-        <input type="text" name="link" placeholder="Add your link here" />
+        <input type="text" name="url" placeholder="Add your link here" />
 
         <button disabled={isPending} type="submit">
-          {isPending ? "Sending..." : "Add link"}
+          {isPending ? "Sending..." : "Add url"}
         </button>
       </form>
       {

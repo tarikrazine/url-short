@@ -1,11 +1,18 @@
+import { RedirectType } from "next/dist/client/components/redirect";
+
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import Button from "@/components/Button";
-import { hashPassword } from "@/lib/hashPassword";
+
 import { db } from "@/lib/db";
 import { newUser, usersTable } from "@/schema/users";
-import { eq } from "drizzle-orm";
-import { createSelectSchema } from "drizzle-zod";
+
+import { hashPassword } from "@/lib/hashPassword";
+import { decodeUserSession } from "@/lib/session";
 
 const registerSchema = z
   .object({
@@ -20,6 +27,22 @@ const registerSchema = z
   });
 
 export default async function RegisterPage() {
+
+  const getSession = cookies().get('session_id')?.value
+
+  if (getSession) {
+
+    const verifyJwt = await decodeUserSession(getSession!)
+  
+    const [ getUser ] = await db.select({ id: usersTable.id, email: usersTable.email }).from(usersTable).where(eq(usersTable.id, Number(verifyJwt?.user)))
+  
+    if (getUser) {
+      redirect('/links', RedirectType.push)
+    }
+    
+  }
+
+
   async function registerUser(formData: FormData) {
     "use server";
 
