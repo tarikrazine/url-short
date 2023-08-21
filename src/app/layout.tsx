@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: 'Starter kit shorter url',
 }
 
+export const runtime = 'edge'
+
 export default function RootLayout({
   children,
 }: {
