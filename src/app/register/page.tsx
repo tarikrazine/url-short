@@ -58,14 +58,12 @@ export default async function RegisterPage() {
 
     const [ userExists ] = await db.select({ id: usersTable.id, email: usersTable.email, username: usersTable.username }).from(usersTable).where(eq(usersTable.email, validateForm.data.email))
 
-    console.log("Already", userExists)
-
     if (userExists) {
       console.log('User already register')
       return
     }
 
-    const hashedPassword = hashPassword(validateForm.data.password)
+    const hashedPassword = await hashPassword(validateForm.data.password)
 
     const user: newUser = {
         username: validateForm.data.username,

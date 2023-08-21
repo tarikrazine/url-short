@@ -8,7 +8,7 @@ import { usersTable } from "@/schema/users";
 import { cookies } from "next/headers";
 import { decodeUserSession } from "@/lib/session";
 
-//export const runtime = "edge";
+export const runtime = "edge";
 
 export async function GET() {
   const limit = 100;

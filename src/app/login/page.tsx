@@ -24,14 +24,19 @@ export default async function LoginPage() {
 
   const getSession = cookies().get('session_id')?.value
 
+  
   if (getSession) {
-
+    
     const verifyJwt = await decodeUserSession(getSession)
-  
-    const [ getUser ] = await db.select({ id: usersTable.id, email: usersTable.email }).from(usersTable).where(eq(usersTable.id, Number(verifyJwt?.user)))
-  
-    if (getUser) {
-      redirect('/links', RedirectType.push)
+
+    if (verifyJwt) {
+
+      const [ getUser ] = await db.select({ id: usersTable.id, email: usersTable.email }).from(usersTable).where(eq(usersTable.id, Number(verifyJwt?.user)))
+    
+      if (getUser) {
+        redirect('/links', RedirectType.push)
+      }
+
     }
 
   }
@@ -60,7 +65,7 @@ export default async function LoginPage() {
       return
     }
 
-    const comparedPassword = comparePassword(
+    const comparedPassword = await comparePassword(
       validateForm.data.password,
       userExists.password
     );

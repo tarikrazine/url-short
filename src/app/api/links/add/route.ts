@@ -12,7 +12,7 @@ import { randomShortString } from "@/lib/randomShortString";
 import { decodeUserSession } from "@/lib/session";
 import { User, usersTable } from "@/schema/users";
 
-//export const runtime = "edge";
+export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   const body = await request.json() as { url: string; jwt?: string };
