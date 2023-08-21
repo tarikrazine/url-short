@@ -9,7 +9,7 @@ export async function encodeUserSession(userId: number) {
   const jwt = await new jose.EncryptJWT({ user: userId })
     .setProtectedHeader({
       alg: "dir",
-      enc: "SHA-256",
+      enc: "A128CBC-HS256",
     })
     .setIssuedAt()
     .setIssuer(issuer)
