@@ -1,24 +1,28 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import Navbar from "@/components/Navbar";
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Shorter url',
-  description: 'Starter kit shorter url',
-}
+  title: "Shorter url",
+  description: "Starter kit shorter url",
+};
 
-export const runtime = 'edge'
+export const runtime = "edge";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen`}>{children}</body>
+      <body className={`${inter.className} min-h-screen`}>
+        <Navbar />
+        <div className="flex p-6">{children}</div>
+      </body>
     </html>
-  )
+  );
 }

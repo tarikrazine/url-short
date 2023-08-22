@@ -18,9 +18,9 @@ export default async function LinksPage() {
   //   const data = await getLinks();
 
   return (
-    <>
+    <div className="flex-1">
       <AddLink />
       <LinksTable />
-    </>
+    </div>
   );
 }
